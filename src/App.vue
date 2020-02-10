@@ -70,7 +70,7 @@
 
 
                 })
-                // .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
+                .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
                 .from('#pattern-top', {
                     duration: 1.3,
                     transformOrigin: 'center bottom',
