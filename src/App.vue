@@ -14,6 +14,7 @@
 
     gsap.registerPlugin(MorphSVGPlugin, SlowMo, GSDevTools);
 
+
     export default {
         name: 'app',
 
@@ -21,47 +22,125 @@
             Envelope
         },
         mounted() {
-            GSDevTools.create({minimal: true});
-            const tl = gsap.timeline();
-            MorphSVGPlugin.convertToPath('circle, rect, ellipse, line, polygon, polyline');
-            // findShapeIndex("#top-open > path", "#top-closed > path");
-            tl
 
-                .to('#closed-path', {
+            // function setSvgAttrs() {
+            //     let svg = document.getElementsByTagName('svg')[0];
+            //
+            //     const background01 = document.querySelector('#closed');
+            //
+            //
+            //     function createFilter() {
+            //         const svgns = "http://www.w3.org/2000/svg";
+            //
+            //         let filter = document.createElementNS(svgns, "filter");
+            //         let defs = document.createElementNS(svgns, "defs");
+            //         let gaussian = document.createElementNS(svgns, "feGaussianBlur");
+            //         gaussian.setAttribute("stdDeviation", '3 1 ');
+            //         filter.setAttribute("id", "blur-image-effect");
+            //
+            //         svg.appendChild(defs);
+            //         defs.appendChild(filter);
+            //         filter.appendChild(gaussian);
+            //     }
+            //
+            //     function applyFilter(elem, filterId) {
+            //         elem.style.filter = "url(#" + filterId + ")";
+            //         return elem;
+            //     }
+            //
+            //     createFilter();
+            //     applyFilter(background01, 'blur-image-effect');
+            // }
+
+            // setSvgAttrs();
+
+            // GSDevTools.create({timeline: tlOpen});
+            const tlStart = gsap.timeline();
+            const tlOpen = gsap.timeline({paused: true});
+            MorphSVGPlugin.convertToPath('circle, rect, ellipse, line, polygon, polyline');
+            tlOpen
+
+                .to('#arrow', {autoAlpha: 0})
+                .to('#button', {autoAlpha: 0, scale: 0, transformOrigin: 'center center'}, '<')
+                .to('#closed', {
                     duration: 2,
                     transformOrigin: 'center top',
                     fill: '#f5f5f5',
-                    scaleY: -1
-                    // morphSVG: {
-                    //     shape: '#opened-path',
-                    //     ease: 'slow(1.1,2.5)',
-                    //     type: 'rotational',
-                    //     shapeIndex: 1
-                    // }
+                    scaleY: -1,
+
 
                 })
-                .from('#pattern', {
+                // .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
+                .from('#pattern-top', {
                     duration: 1.3,
                     transformOrigin: 'center bottom',
-                    scaleY: 0
-                }, '<0.7')
+                    scaleY: 0,
+                    // y: '+=6'
+                }, '<0.6')
+                .from('#paper', {
+                    duration: 2,
+                    scaleY: 0,
+                    transformOrigin: 'center bottom'
 
+                }, '-=2.2')
+
+
+                .to('#paper', {y: '-=85'}, '<')
+                // .to('#paper-mask', {y: '+=180'}, '0')
+                .from('#shadow-paper', {autoAlpha: 0, y: '+=4'}, '<1')
+                .add('show-paper')
+                .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
+                    y: '+=860',
+                    duration: 2.49,
+                    delay: 1,
+                    autoAlpha: 0
+                }, 'show-paper')
+                .to('#paper-mask', {y: '+=170', duration: 0.40, delay: 1}, 'show-paper')
+                .to('#shadow-paper', {autoAlpha: 0, duration: 0.2, delay: 1}, 'show-paper')
+
+
+                .to('#animation > g:nth-child(11)', {
+                    scale: 2.4,
+                    x: '+=250',
+                    y: '+=40',
+                    transformOrigin: 'center center'
+                })
+
+
+                .fromTo('#envelope-half', {x: '-=1000'}, {x: -650}, '<')
+
+
+                .from('#shadows-inner', {autoAlpha: 0, y: '+=2'}, 0.1);
+
+
+            tlStart
+                .from('#text > *', {autoAlpha: 0, stagger: 0.1})
+                .from('#arrow', {y: '+=10', repeat: 10, yoyo: true, autoAlpha: 0});
+
+
+            const button = document.querySelector('#app');
+
+            button.addEventListener('click', function () {
+                tlOpen.play();
+                tlStart.progress(0).pause();
+            })
         }
     }
 
 </script>
 
 <style>
-    #closed-shadows
-    , #shadow-paper {
+    #closed-shadows, #opened-top, #shadow-paper {
         visibility: hidden;
     }
 
 
     html {
-        background-color: black;
+        background-color: beige;
         padding: 0;
         margin: 0;
+        overflow: hidden;
+
     }
 
     #app {
@@ -78,7 +157,8 @@
 
 
     #app svg {
-        height: 80vh;
+        height: 95vh;
+        width: 100vw;
         pointer-events: none;
     }
 </style>
