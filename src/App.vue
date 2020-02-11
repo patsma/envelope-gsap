@@ -111,14 +111,18 @@
                 .to('#paper', {
                     duration: 1,
                     stroke: 'transparent',
-                    fill: '#f49494',
-                    x: '+=280',
-                    y: '+=80',
-                    morphSVG: {
-                        shape: "#paper-morph-to",
-                        type: "linear",
-                        shapeIndex: "2"
-                    }
+                    // fill: '#f49494',
+                    scaleX: 1.36,
+                    scaleY: 1.45,
+                    transformOrigin: 'center center',
+                    x: '+=380',
+                    // y: '+=80',
+                    y: '-=20',
+                    // morphSVG: {
+                    //     shape: "#paper-morph-to",
+                    //     type: "rotational",
+                    //     shapeIndex: "1"
+                    // }
                 }, 'show-final')
 
 
@@ -149,7 +153,9 @@
 </script>
 
 <style>
-    #closed-shadows, #opened-top, #shadow-paper, #paper-morph-to {
+
+
+    #closed-shadows, #opened-top, #shadow-paper,#paper-morph-to {
         visibility: hidden;
     }
 
