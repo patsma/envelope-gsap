@@ -107,7 +107,7 @@
                     }
                 }, 'show-final')
                 .from('#paper-mask-full', {autoAlpha: 0, duration: 0.01}, 'show-final')
-                .fromTo('#envelope-half', {xPercent: '-=120'}, {xPercent: '+=40'}, 'show-final')
+                .fromTo('#envelope-half', {xPercent: '-=120'}, {xPercent: '+=50'}, 'show-final')
 
 
                 .to('#envelope-half', {xPercent: '-=100', duration: 2, delay: 1})
@@ -163,9 +163,15 @@
     }
 
 
+
+    /*#app svg {*/
+    /*    height: 95vh;*/
+    /*    width: 100vw;*/
+    /*    pointer-events: none;*/
+    /*} */
     #app svg {
-        height: 95vh;
-        width: 100vw;
+        height: 1032px;
+        width: 1667px;
         pointer-events: none;
     }
 </style>
