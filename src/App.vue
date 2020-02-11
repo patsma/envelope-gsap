@@ -88,28 +88,30 @@
                 .to('#paper', {y: '-=85'}, '<')
                 // .to('#paper-mask', {y: '+=180'}, '0')
                 .from('#shadow-paper', {autoAlpha: 0, y: '+=4'}, '<1')
-                .add('show-paper')
+                .add('show-paper', '-=1')
                 .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
                     y: '+=860',
                     duration: 2.49,
-                    delay: 1,
+
                     autoAlpha: 0
                 }, 'show-paper')
-                .to('#paper-mask', {y: '+=170', duration: 0.40, delay: 1}, 'show-paper')
-                .to('#shadow-paper', {autoAlpha: 0, duration: 0.2, delay: 1}, 'show-paper')
+                .to('#paper-mask', {y: '+=320', duration: 0.8}, 'show-paper')
+                // .to('#shadow-paper', {autoAlpha: 0, duration: 0.2}, 'show-paper')
+
+                .add('show-final', '-=1')
+                .to('#paper', {
+                    x: '+=300',
+                    y: '+=200',
+                    morphSVG: {
+                        shape: '#paper-to'
+                    }
+                }, 'show-final')
+                .from('#paper-mask-full', {autoAlpha: 0, duration: 0.01}, 'show-final')
+                .fromTo('#envelope-half', {xPercent: '-=120'}, {xPercent: '+=40'}, 'show-final')
 
 
-                .to('#animation > g:nth-child(11)', {
-                    scale: 2.4,
-                    x: '+=250',
-                    y: '+=40',
-                    transformOrigin: 'center center'
-                })
-
-
-                .fromTo('#envelope-half', {x: '-=1000'}, {x: -650}, '<')
-
-
+                .to('#envelope-half', {xPercent: '-=100', duration: 2, delay: 1})
+                // .to('#paper', {x: 0, y: -20}, '<')
                 .from('#shadows-inner', {autoAlpha: 0, y: '+=2'}, 0.1);
 
 
@@ -130,8 +132,12 @@
 </script>
 
 <style>
-    #closed-shadows, #opened-top, #shadow-paper {
+    #closed-shadows, #opened-top, #shadow-paper, #paper-to {
         visibility: hidden;
+    }
+
+    #paper {
+        stroke: transparent;
     }
 
 
@@ -155,7 +161,6 @@
         align-content: center;
 
     }
-
 
 
     #app svg {
