@@ -153,7 +153,9 @@
         display: grid;
         justify-content: center;
         align-content: center;
+
     }
+
 
 
     #app svg {
