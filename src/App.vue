@@ -54,14 +54,18 @@
 
             // setSvgAttrs();
 
-            // GSDevTools.create({timeline: tlOpen});
-            const tlStart = gsap.timeline();
-            const tlOpen = gsap.timeline({paused: true});
+            GSDevTools.create({timeline: tlOpen});
+            // const tlStart = gsap.timeline();
+            const tlOpen = gsap.timeline();
             MorphSVGPlugin.convertToPath('circle, rect, ellipse, line, polygon, polyline');
             tlOpen
 
+                .from('#text > *', {autoAlpha: 0, stagger: 0.1})
+                .from('#arrow', {y: '+=10', repeat: 2, yoyo: true, autoAlpha: 0})
                 .to('#arrow', {autoAlpha: 0})
                 .to('#button', {autoAlpha: 0, scale: 0, transformOrigin: 'center center'}, '<')
+                .to('#text > *', {autoAlpha: 0, stagger: 0.1}, '<')
+
                 .to('#closed', {
                     duration: 2,
                     transformOrigin: 'center top',
@@ -70,7 +74,7 @@
 
 
                 })
-                .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
+                // .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
                 .from('#pattern-top', {
                     duration: 1.3,
                     transformOrigin: 'center bottom',
@@ -86,51 +90,66 @@
 
 
                 .to('#paper', {y: '-=85'}, '<')
-                // .to('#paper-mask', {y: '+=180'}, '0')
-                .from('#shadow-paper', {autoAlpha: 0, y: '+=4'}, '<1')
-                .add('show-paper')
+                .add('show-paper', '-=1')
                 .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
                     y: '+=860',
-                    duration: 2.49,
-                    delay: 1,
+                    duration: 2.54,
+
                     autoAlpha: 0
                 }, 'show-paper')
-                .to('#paper-mask', {y: '+=170', duration: 0.40, delay: 1}, 'show-paper')
-                .to('#shadow-paper', {autoAlpha: 0, duration: 0.2, delay: 1}, 'show-paper')
+                .to('#paper-mask', {y: '+=340', duration: 0.86}, 'show-paper')
 
 
-                .to('#animation > g:nth-child(11)', {
-                    scale: 2.4,
-                    x: '+=250',
-                    y: '+=40',
-                    transformOrigin: 'center center'
-                })
+                // .to('#animation > g:nth-child(11)', {
+                //
+                //     x: '+=250',
+                //     y: '+=40',
+                //     transformOrigin: 'center center'
+                // }, '<0.9')
+                .add('show-final', '-=1')
+                .from('#paper-mask-full', {autoAlpha: 0, duration: 0.01}, 'show-final')
+                .to('#paper', {
+                    duration: 1,
+                    stroke: 'transparent',
+                    fill: '#f49494',
+                    x: '+=280',
+                    y: '+=80',
+                    morphSVG: {
+                        shape: "#paper-morph-to",
+                        type: "linear",
+                        shapeIndex: "2"
+                    }
+                }, 'show-final')
 
 
-                .fromTo('#envelope-half', {x: '-=1000'}, {x: -650}, '<')
+                .fromTo('#envelope-half', {x: '-=1500', duration: 5}, {x: -1050}, 'show-final')
+
+                .to('#envelope-half', {x: '-=1050', delay: 0.5})
+                .to('#paper', {x: 0}, '<')
 
 
                 .from('#shadows-inner', {autoAlpha: 0, y: '+=2'}, 0.1);
 
 
-            tlStart
-                .from('#text > *', {autoAlpha: 0, stagger: 0.1})
-                .from('#arrow', {y: '+=10', repeat: 10, yoyo: true, autoAlpha: 0});
+            // tlStart
+            //     .from('#text > *', {autoAlpha: 0, stagger: 0.1})
+            //     .from('#arrow', {y: '+=10', repeat: 2, yoyo: true, autoAlpha: 0})
+            // ;
 
 
-            const button = document.querySelector('#app');
-
-            button.addEventListener('click', function () {
-                tlOpen.play();
-                tlStart.progress(0).pause();
-            })
+            // const button = document.querySelector('#app');
+            //
+            // button.addEventListener('click', function () {
+            //     tlOpen.play();
+            //     tlStart.progress(0).pause();
+            // })
         }
     }
 
 </script>
 
 <style>
-    #closed-shadows, #opened-top, #shadow-paper {
+    #closed-shadows, #opened-top, #shadow-paper, #paper-morph-to {
         visibility: hidden;
     }
 
