@@ -70,7 +70,7 @@
 
 
                 })
-                .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
+                // .to('#filter-drop', 0.5, {attr: {stdDeviation: 0, dy: 0}}, '<')
                 .from('#pattern-top', {
                     duration: 1.3,
                     transformOrigin: 'center bottom',
@@ -87,7 +87,7 @@
 
                 .to('#paper', {y: '-=85'}, '<')
                 // .to('#paper-mask', {y: '+=180'}, '0')
-                .from('#shadow-paper', {autoAlpha: 0, y: '+=4'}, '<1')
+                // .from('#shadow-paper', {autoAlpha: 0, y: '+=4'}, '<1')
                 .add('show-paper', '-=1')
                 .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
                     y: '+=860',
@@ -101,10 +101,12 @@
                 .add('show-final', '-=1')
                 .to('#paper', {
                     x: '+=300',
-                    y: '+=200',
-                    morphSVG: {
-                        shape: '#paper-to'
-                    }
+                    y: '-=70',
+                    scale: 1.4,
+                    transformOrigin: 'center center'
+                    // morphSVG: {
+                    //     shape: '#paper-to'
+                    // }
                 }, 'show-final')
                 .from('#paper-mask-full', {autoAlpha: 0, duration: 0.01}, 'show-final')
                 .fromTo('#envelope-half', {xPercent: '-=120'}, {xPercent: '+=50'}, 'show-final')
@@ -161,7 +163,6 @@
         align-content: center;
 
     }
-
 
 
     /*#app svg {*/
