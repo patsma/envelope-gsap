@@ -28,7 +28,7 @@
 
             function envelopeAnimation(positionX, positionY, scale) {
 
-                GSDevTools.create();
+                // GSDevTools.create();
                 const tlStart = gsap.timeline();
                 const tlOpen = gsap.timeline({paused: true});
                 MorphSVGPlugin.convertToPath('circle, rect, ellipse, line, polygon, polyline');
