@@ -1,96 +1,133 @@
 <template>
     <div id='app'>
-        <Envelope/>
+        <Envelope class="envelope"/>
+        <Card class="card"/>
     </div>
 </template>
 
 <script>
     import Envelope from './assets/envelope.svg?inline';
+    import Card from './assets/card.svg?inline';
 
     import gsap from 'gsap';
     import MorphSVGPlugin from 'gsap/MorphSVGPlugin.js';
+    import MotionPathPlugin from 'gsap/MotionPathPlugin.js';
     import {SlowMo} from "gsap/EasePack";
     import {GSDevTools} from "gsap/GSDevTools";
 
-    gsap.registerPlugin(MorphSVGPlugin, SlowMo, GSDevTools);
+    gsap.registerPlugin(MorphSVGPlugin, SlowMo, MotionPathPlugin, GSDevTools);
 
 
     export default {
         name: 'app',
 
         components: {
-            Envelope
+            Envelope,
+            Card
         },
         mounted() {
 
 
+            function envelopeAnimation() {
 
 
-            function envelopeAnimation(positionX, positionY, scale) {
+                let widthEnvelope = 600;
 
-                // GSDevTools.create();
+
+                let envelope = document.querySelector('.envelope');
+                let card = document.querySelector('.card');
+
+
+                function percentage(percent, total) {
+                    return ((percent / 100) * total).toFixed(2)
+                }
+
+
+                const percentOffsetOfCardWidth = percentage(12, widthEnvelope);
+                let widthCard = widthEnvelope - percentOffsetOfCardWidth;
+
+                let fromElement = document.querySelector(".card"),
+                    toElement = document.querySelector("#card-position"),
+                    point = {x: 0, y: 0},
+                    convertedPoint = convertForTransforms(
+                        fromElement,
+                        toElement,
+                        point,
+                        {x: -20, y: 0}
+                    );
+
+
+                // returns the relative distance on the x and y axis.
+                function convertForTransforms(fromElement, toElement, fromPoint, toPoint) {
+                    var parent = fromElement.parentNode,
+                        p1 = MotionPathPlugin.convertCoordinates(fromElement, parent, fromPoint),
+                        p2 = MotionPathPlugin.convertCoordinates(toElement, parent, toPoint);
+                    return {x: p2.x - p1.x, y: p2.y - p1.y};
+                }
+
+                gsap.set(envelope, { width: widthEnvelope});
+                gsap.set(card, {x: convertedPoint.x, y: convertedPoint.y, width: widthCard});
+                // console.log(convertedPoint);
+
+                // function changexlinkhref(value) {
+                //     document.querySelector("image").setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', value);
+                // }
+
+                // changexlinkhref(url);
+                GSDevTools.create();
                 const tlStart = gsap.timeline();
-                const tlOpen = gsap.timeline({paused: true});
-                MorphSVGPlugin.convertToPath('circle, rect, ellipse, line, polygon, polyline');
+                const tlOpen = gsap.timeline();
                 tlOpen
 
-                    .to('#arrow', {autoAlpha: 0})
-                    .to('#button', {autoAlpha: 0, scale: 0, transformOrigin: 'center center'}, '<')
-                    .to('#closed', {
-                        duration: 2,
-                        transformOrigin: 'center top',
-                        fill: '#f5f5f5',
-                        scaleY: -1,
+                // .to(envelope, {x: 0, y: 0})
+                // .to(card, {x: 0, y: 0})
+                ;
+                // .to('#arrow', {autoAlpha: 0})
+                // // .to('#button', {autoAlpha: 0, scale: 0, transformOrigin: 'center center'}, '<')
+                // .to('#closed', {
+                //     duration: 2,
+                //     transformOrigin: 'center top',
+                //     fill: '#f5f5f5',
+                //     scaleY: -1,
+                //
+                //
+                // })
+                // .from('#pattern-top', {
+                //     duration: 1.3,
+                //     transformOrigin: 'center bottom',
+                //     scaleY: 0,
+                // }, '<0.6')
+                // .from('#paper', {
+                //     duration: 2,
+                //     scaleY: 0,
+                //     transformOrigin: 'center bottom'
+                //
+                // }, '-=1')
+                //
+                //
+                //
+                //
+                // .add('show-paper')
+                // .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
+                //     y: '+=250',
+                //     duration: 2.49
+                //
+                //
+                // }, 'show-paper')
+                // .to('#paper-mask', {y: '250', duration: 2.49}, 'show-paper')
+                //
+                // .to('.envelope', {
+                //     x: 0,
+                //     y: 500,
+                //
+                //     scale: 1
+                //
+                // })
 
 
-                    })
-                    .from('#pattern-top', {
-                        duration: 1.3,
-                        transformOrigin: 'center bottom',
-                        scaleY: 0,
-                    }, '<0.6')
-                    .from('#paper', {
-                        duration: 2,
-                        scaleY: 0,
-                        transformOrigin: 'center bottom'
-
-                    }, '-=2.2')
-
-
-                    .to('#paper', {y: '-=85'}, '<')
-                    .set('#mask', {display: 'none'})
-
-                    .add('show-paper', '-=1')
-                    .to(['#pattern-top', '#closed', '#shadows-inner', '#pattern-bottom', '#accents', '#body', '#bottom-shadow'], {
-                        y: '+=960',
-                        duration: 2.49,
-
-                        autoAlpha: 0
-                    }, 'show-paper')
-                    .to('#paper-mask', {y: '+=280', duration: 0.5}, 'show-paper')
-
-                    .add('show-final', '-=1')
-                    .to('#paper', {
-                        x: positionX,
-                        y: positionY,
-                        scale: scale,
-                        transformOrigin: 'center center'
-
-                    }, 'show-final')
-
-
-                    .from('#paper-mask-full', {autoAlpha: 0, duration: 0.01}, 'show-final')
-                    .fromTo('#envelope-half', {xPercent: '-=120'}, {xPercent: '-=120'}, 'show-final')
-
-
-                    .to('#envelope-half', {xPercent: '-=100', duration: 2, delay: 1})
-                    // .to('#paper', {x: 0, y: -20}, '<')
-                    .from('#shadows-inner', {autoAlpha: 0, y: '+=2'}, 0.1);
-
-
-                tlStart
-                    .from('#text > *', {autoAlpha: 0, stagger: 0.1})
-                    .from('#arrow', {y: '+=10', repeat: 10, yoyo: true, autoAlpha: 0});
+                // tlStart
+                //     .from('#text > *', {autoAlpha: 0, stagger: 0.1})
+                //     .from('#arrow', {y: '+=10', repeat: 10, yoyo: true, autoAlpha: 0});
                 const button = document.querySelector('#app');
 
                 button.addEventListener('click', function () {
@@ -99,7 +136,7 @@
                 })
             }
 
-            envelopeAnimation(600, -100, 1);
+            envelopeAnimation();
 
 
         }
@@ -112,9 +149,10 @@
         visibility: hidden;
     }
 
-    #paper {
-        stroke: transparent;
+    * {
+        box-sizing: border-box;
     }
+
 
     body {
         margin: 0;
@@ -141,18 +179,54 @@
         justify-content: center;
         align-content: center;
         width: 100vw;
+        position: relative;
 
     }
 
 
-    /*#app svg {*/
-    /*    height: 95vh;*/
-    /*    width: 100vw;*/
-    /*    pointer-events: none;*/
-    /*} */
     #app svg {
-        height: 100vh;
-        width: 100%;
+
         pointer-events: none;
     }
+
+    /*.card {*/
+    /*    position: absolute;*/
+    /*    left: 50%;*/
+    /*    top: 50.5%;*/
+    /*    width: 539px;*/
+    /*    height: auto;*/
+    /*    transform: translate(-50%, -50%);*/
+    /*}*/
+
+    /*.envelope {*/
+    /*    position: absolute;*/
+    /*    left: 50%;*/
+    /*    top: 50%;*/
+    /*    width: 600px;*/
+    /*    height: auto;*/
+    /*    transform: translate(-50%, -50%);*/
+
+    /*}*/
+
+
+    .card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 539px;
+        height: auto;
+        /*transform: translate(-50%, -50%);*/
+
+    }
+
+    .envelope {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 600px;
+        height: auto;
+
+    }
+
+
 </style>
