@@ -196,8 +196,12 @@
                 })
             }
 
-            envelopeAnimation(300, 400, 900, 0, 'https://via.placeholder.com/860x645');
-            // envelopeAnimation(300, 350, 0, 0, 'https://via.placeholder.com/720x1280');
+            if (window.innerWidth < 1024) {
+                envelopeAnimation(300, 350, 0, 0, 'https://via.placeholder.com/720x1280');
+            } else {
+                envelopeAnimation(300, 400, 0, 0, 'https://via.placeholder.com/860x645');
+
+            }
 
 
         }
